@@ -1,21 +1,18 @@
-package Application;
+package application;
 
 import RéseauRoutier.*;
-import OSM.*;
-
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Plan de la ville fictive");
-        Graphe graphe = LecteurOSM.chargerFichier("ville.osm");
+        Graphe graphe = LecteurTexte.chargerFichier("ville.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
-        System.out.println("\ntournée des encombrants (via plus court chemin)");
+        System.out.println("\nTournée des encombrants (via plus court chemin)");
         System.out.print("ID du dépôt : ");
         String idDepot = sc.nextLine();
 
