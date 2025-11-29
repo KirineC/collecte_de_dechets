@@ -12,15 +12,13 @@ public class Graphe {
         adjacence.putIfAbsent(n, new ArrayList<>());
     }
 
-    // Ajouter une arête avec double sens
-    public void ajouterArete(Noeud a, Noeud b, double distance, String nomRue, boolean doubleSens) {
+    // Ajouter une arête
+    public void ajouterArete(Noeud a, Noeud b, double distance, String nomRue) {
         // Arête a → b
         adjacence.get(a).add(new Arete(a, b, distance, nomRue));
 
-        // Si double sens, ajouter b → a
-        if (doubleSens) {
-            adjacence.get(b).add(new Arete(b, a, distance, nomRue));
-        }
+        // Graphe non orienté dans HO1
+        adjacence.get(b).add(new Arete(b, a, distance, nomRue));
     }
 
     // Récupérer un noeud
