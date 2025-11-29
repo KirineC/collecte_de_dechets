@@ -30,8 +30,24 @@ public class Main {
         List<Noeud> trajet = Dijkstra.plusCourtChemin(graphe, depot, maison);
 
         System.out.println("\nItinéraire optimal :");
-        for (Noeud n : trajet) {
-            System.out.println(" → " + n.getId());
+        double distanceTotale = 0.0;
+
+        for (int i = 0; i < trajet.size(); i++) {
+            System.out.println(" → " + trajet.get(i).getId());
+
+            if (i > 0) {
+                Noeud a = trajet.get(i - 1);
+                Noeud b = trajet.get(i);
+
+                Arete ar = graphe.getArete(a, b);
+
+                if (ar != null) {
+                    distanceTotale += ar.getDistance();
+                    System.out.println("   (Rue : " + ar.getNomRue() +
+                            ", distance : " + ar.getDistance() + ")");
+                }
+            }
         }
+        System.out.println("\nDistance totale : " + distanceTotale + " mètres");
     }
 }
