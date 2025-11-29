@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Plan de la ville fictive");
-        Graphe graphe = LecteurTexte.chargerFichier("ville.txt");
+        System.out.println("Plan de la ville");
+        Graphe graphe = LecteurTexte.chargerFichier("ville1.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         System.out.println("\nTournée des encombrants (aller-retour via plus court chemin)");

@@ -11,14 +11,15 @@ public class LecteurTexte {
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             while ((ligne = br.readLine()) != null) {
-                // Format : idDepart;idArrivee;nomRue;distance
+                // Format : idDepart;idArrivee;nomRue;distance;doubleSens
                 String[] parts = ligne.split(";");
-                if (parts.length != 4) continue;
+                if (parts.length != 5) continue;
 
                 String idDepart = parts[0];
                 String idArrivee = parts[1];
                 String nomRue = parts[2];
                 double distance = Double.parseDouble(parts[3]);
+                boolean doubleSens = Boolean.parseBoolean(parts[4]);
 
                 // Créer les nœuds si nécessaire
                 Noeud depart = graphe.getNoeud(idDepart);
@@ -33,8 +34,8 @@ public class LecteurTexte {
                     graphe.ajouterNoeud(arrivee);
                 }
 
-                // Ajouter l'arête
-                graphe.ajouterArete(depart, arrivee, distance, nomRue);
+                // Ajouter l'arête avec info double sens
+                graphe.ajouterArete(depart, arrivee, distance, nomRue, doubleSens);
             }
         } catch (IOException e) {
             e.printStackTrace();
