@@ -1,0 +1,18 @@
+public class Arete {
+    private Noeud depart;
+    private Noeud arrivee;
+    private double distance;
+    private String nomRue;
+
+    public Arete(Noeud depart, Noeud arrivee, double distance, String nomRue) {
+        this.depart = depart;
+        this.arrivee = arrivee;
+        this.distance = distance;
+        this.nomRue = nomRue;
+    }
+
+    public Noeud getDepart() { return depart; }
+    public Noeud getArrivee() { return arrivee; }
+    public double getDistance() { return distance; }
+    public String getNomRue() { return nomRue; }
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Copilot Filter">
+  <!-- Rue résidentielle -->
+  <way id="170080600">
+    <nd ref="1812308397"/>
+    <nd ref="1812308399"/>
+    <nd ref="2144151998"/>
+    <nd ref="1812308402"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Avenue du Pradel"/>
+  </way>
+
+  <!-- Rue résidentielle -->
+  <way id="170080608">
+    <nd ref="1812308397"/>
+    <nd ref="1812308449"/>
+    <nd ref="1812308457"/>
+    <nd ref="1812308463"/>
+    <nd ref="1812308475"/>
+    <nd ref="1812308478"/>
+    <nd ref="1812308506"/>
+    <nd ref="1812308517"/>
+    <nd ref="1812308519"/>
+    <nd ref="1812308528"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Rue des Lavoirs"/>
+  </way>
+
+  <!-- Rue résidentielle -->
+  <way id="204407506">
+    <nd ref="1812308527"/>
+    <nd ref="2144152033"/>
+    <nd ref="2144152035"/>
+    <nd ref="2144152039"/>
+    <nd ref="2144152041"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Avenue du Barry"/>
+  </way>
+
+  <!-- Rue résidentielle -->
+  <way id="204407507">
+    <nd ref="1812308449"/>
+    <nd ref="2144152003"/>
+    <nd ref="2144152004"/>
+    <nd ref="2144152005"/>
+    <nd ref="2144152006"/>
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Rue des Pailhès"/>
+  </way>
+
+  <!-- Route tertiaire -->
+  <way id="321392654">
+    <nd ref="1498096125"/>
+    <nd ref="36405644"/>
+    <nd ref="36405645"/>
+    <nd ref="36405646"/>
+    <nd ref="36405647"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="Route du Moulin"/>
+    <tag k="ref" v="D 20"/>
+  </way>
+</osm>
