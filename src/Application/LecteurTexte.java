@@ -2,7 +2,6 @@ package application;
 
 import RéseauRoutier.*;
 import java.io.*;
-import java.util.*;
 
 public class LecteurTexte {
 
@@ -12,9 +11,9 @@ public class LecteurTexte {
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             while ((ligne = br.readLine()) != null) {
-                // Format : idDepart;latDepart;lonDepart;idArrivee;latArrivee;lonArrivee;nomRue
+                // Format : idDepart;latDepart;lonDepart;idArrivee;latArrivee;lonArrivee;nomRue;distance
                 String[] parts = ligne.split(";");
-                if (parts.length != 7) continue;
+                if (parts.length != 8) continue;
 
                 String idDepart = parts[0];
                 double latDepart = Double.parseDouble(parts[1]);
@@ -25,6 +24,7 @@ public class LecteurTexte {
                 double lonArrivee = Double.parseDouble(parts[5]);
 
                 String nomRue = parts[6];
+                double distance = Double.parseDouble(parts[7]); // distance directe depuis le fichier
 
                 // Créer les nœuds si nécessaire
                 Noeud depart = graphe.getNoeud(idDepart);
@@ -39,10 +39,7 @@ public class LecteurTexte {
                     graphe.ajouterNoeud(arrivee);
                 }
 
-                // Calcul distance euclidienne
-                double distance = calculerDistance(depart, arrivee);
-
-                // Ajouter l'arête
+                // Ajouter l'arête avec la distance du fichier
                 graphe.ajouterArete(depart, arrivee, distance, nomRue);
             }
         } catch (IOException e) {
@@ -50,11 +47,5 @@ public class LecteurTexte {
         }
 
         return graphe;
-    }
-
-    private static double calculerDistance(Noeud a, Noeud b) {
-        double dx = a.getLatitude() - b.getLatitude();
-        double dy = a.getLongitude() - b.getLongitude();
-        return Math.sqrt(dx * dx + dy * dy);
     }
 }
