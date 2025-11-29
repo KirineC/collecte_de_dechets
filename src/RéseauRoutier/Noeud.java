@@ -1,3 +1,5 @@
+package RéseauRoutier;
+
 public class Noeud {
     private String id;
     private double latitude;

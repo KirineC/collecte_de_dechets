@@ -1,3 +1,5 @@
+package RéseauRoutier;
+
 public class Arete {
     private Noeud depart;
     private Noeud arrivee;
