@@ -13,43 +13,30 @@ public class LecteurTexte {
             String ligne;
             while ((ligne = br.readLine()) != null) {
                 String[] parts = ligne.split(";");
-                if (parts.length < 5) continue; // pour H02/H03
+                if (parts.length != 5) continue;
 
                 String idDepart = parts[0].trim();
                 String idArrivee = parts[1].trim();
                 double distance = Double.parseDouble(parts[2].trim());
-                String orientation = parts[3].trim();
-                int nbVoies = Integer.parseInt(parts[4].trim());
-
-                String nomRue = "Rue" + compteurRue;
-                compteurRue++;
+                String typeRue = parts[3].trim().toLowerCase();
+                int sens = Integer.parseInt(parts[4].trim());
 
                 Noeud depart = graphe.getNoeud(idDepart);
-                if (depart == null) {
-                    depart = new Noeud(idDepart);
-                    graphe.ajouterNoeud(depart);
-                }
+                if (depart == null) { depart = new Noeud(idDepart); graphe.ajouterNoeud(depart); }
 
                 Noeud arrivee = graphe.getNoeud(idArrivee);
-                if (arrivee == null) {
-                    arrivee = new Noeud(idArrivee);
-                    graphe.ajouterNoeud(arrivee);
-                }
+                if (arrivee == null) { arrivee = new Noeud(idArrivee); graphe.ajouterNoeud(arrivee); }
 
-                // Déterminer orientation de l'arête
                 boolean estOriente;
-                if (orientation.equalsIgnoreCase("simple")) {
-                    estOriente = true;
-                } else { // double sens
-                    if (nbVoies >= 2) estOriente = true; // multi-voies, H02/H03
-                    else estOriente = false;              // 1 voie, ramassage des 2 côtés
-                }
+                if (typeRue.equals("simple"))
+                    estOriente = true;   // sens unique
+                else
+                    estOriente = false;  // double sens
 
+                String nomRue = "Rue" + compteurRue++;
                 graphe.ajouterArete(depart, arrivee, distance, nomRue, estOriente);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
 
         return graphe;
     }
