@@ -7,9 +7,28 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        System.out.println("Choisissez une ville :");
+        System.out.println("1 - Ville fictive (ville.txt)");
+        System.out.println("2 - Paris 15ème (paris.txt)");
+        System.out.print("Votre choix : ");
+
+        int choix = Integer.parseInt(sc.nextLine());
+
+        String fichier;
+
+        if (choix == 1) {
+            fichier = "ville.txt";
+        } else if (choix == 2) {
+            fichier = "paris.txt";
+        } else {
+            System.out.println("Choix invalide.");
+            return;
+        }
+
+        Graphe graphe = application.LecteurTexte.chargerFichier(fichier);
+
 
         System.out.println("Plan de la ville fictive");
-        Graphe graphe = LecteurTexte.chargerFichier("ville.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         System.out.println("\nTournée des encombrants (aller-retour via plus court chemin)");
