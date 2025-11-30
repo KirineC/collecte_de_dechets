@@ -13,8 +13,8 @@ public class Main {
 
         Noeud depot = graphe.getNoeud("Depot");
         if (depot == null) { System.out.println("Le dépôt 'Depot' n'existe pas !"); return; }
-
-        System.out.println("\nChoix du mode de ramassage :\n1 - Un seul particulier\n2 - Plusieurs particuliers");
+        while (true){
+        System.out.println("\nChoix du mode de ramassage :\n1 - Un seul particulier\n2 - Plusieurs particuliers\n3 - Quitter");
         System.out.print("Votre choix : ");
         int choix = Integer.parseInt(sc.nextLine());
 
@@ -69,6 +69,11 @@ public class Main {
             }
             System.out.println("\nDistance totale de la tournée : " + distanceTotale + " m");
         }
+        else if (choix == 3) {
+            break ;
+        }
+        }
+
     }
 
     private static double afficherTrajet(Graphe graphe, Noeud depart, Noeud arrivee, String label) {
