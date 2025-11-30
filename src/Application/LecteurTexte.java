@@ -36,7 +36,6 @@ public class LecteurTexte {
                     arrivee = new Noeud(idArrivee);
                     graphe.ajouterNoeud(arrivee);
                 }
-
                 // Ajouter l'arête
                 graphe.ajouterArete(depart, arrivee, distance, nomRue);
             }
