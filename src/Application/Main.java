@@ -112,10 +112,13 @@ public class Main {
 
                 for (Noeud n : nonVisites) {
                     List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, courant, n);
-                    double dist = 0;
+
+                    double dist = 0.0;
                     for (int i = 1; i < chemin.size(); i++) {
                         Arete ar = graphe.getArete(chemin.get(i - 1), chemin.get(i));
-                        if (ar != null) dist += ar.getDistance();
+                        if (ar != null) {
+                            dist += ar.getDistance();
+                        }
                     }
 
                     if (dist < distMin) {
@@ -123,6 +126,7 @@ public class Main {
                         plusProche = n;
                     }
                 }
+
 
                 if (plusProche == null) {
                     System.out.println("Erreur : impossible de trouver un chemin vers certains particuliers.");
