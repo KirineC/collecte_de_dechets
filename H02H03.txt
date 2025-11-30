@@ -1,0 +1,12 @@
+Depot;RueHaute_Ouest;300;double;2
+Depot;HopitalStell_Nord;400;simple;1
+RueHaute_Ouest;RueHaute_Est;250;double;2
+RueHaute_Est;Rue4Sept_Nord;200;simple;1
+Rue4Sept_Nord;Rue4Sept_Sud;220;double;2
+Rue4Sept_Sud;RueGeneralNoel;180;double;2
+RueGeneralNoel;RueLaurin;160;double;2
+RueLaurin;HopitalStell_Nord;260;simple;1
+P1;RueHaute_Ouest;80;double;1
+P2;Rue4Sept_Nord;70;double;1
+P3;RueGeneralNoel;60;double;1
+P4;HopitalStell_Nord;90;double;1
