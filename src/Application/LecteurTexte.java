@@ -7,18 +7,22 @@ public class LecteurTexte {
 
     public static Graphe chargerFichier(String nomFichier) {
         Graphe graphe = new Graphe();
+        int compteurRue = 1;
 
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
             String ligne;
             while ((ligne = br.readLine()) != null) {
-                // Format : idDepart;idArrivee;nomRue;distance
-                String[] parts = ligne.split(";");
-                if (parts.length != 4) continue;
 
-                String idDepart = parts[0];
-                String idArrivee = parts[1];
-                String nomRue = parts[2];
-                double distance = Double.parseDouble(parts[3]);
+                String[] parts = ligne.split(";");
+                if (parts.length != 3) continue;
+
+                String idDepart = parts[0].trim();
+                String idArrivee = parts[1].trim();
+                double distance = Double.parseDouble(parts[2].trim());
+
+                // Générer un nom de rue unique
+                String nomRue = "Rue" + compteurRue;
+                compteurRue++;
 
                 // Créer les nœuds si nécessaire
                 Noeud depart = graphe.getNoeud(idDepart);

@@ -9,21 +9,24 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Plan de la ville fictive");
-        Graphe graphe = LecteurTexte.chargerFichier("ville.txt");
+        Graphe graphe = LecteurTexte.chargerFichier("villeDepotParti.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
-        System.out.println("\nTournée des encombrants (aller-retour via plus court chemin)");
-        System.out.print("ID du dépôt : ");
-        String idDepot = sc.nextLine();
-
-        System.out.print("ID de la maison à visiter : ");
-        String idMaison = sc.nextLine();
-
+        // Définir le dépôt fixe
+        String idDepot = "Depot";
         Noeud depot = graphe.getNoeud(idDepot);
+        if (depot == null) {
+            System.out.println("Le dépôt 'Depot' n'existe pas dans le graphe !");
+            return;
+        }
+
+        // Demander le particulier à visiter
+        System.out.print("\nID du particulier à visiter (P1 à P4) : ");
+        String idMaison = sc.nextLine();
         Noeud maison = graphe.getNoeud(idMaison);
 
-        if (depot == null || maison == null) {
-            System.out.println("ID invalide.");
+        if (maison == null) {
+            System.out.println("ID du particulier invalide.");
             return;
         }
 
@@ -38,15 +41,12 @@ public class Main {
         System.out.println("\nItinéraire aller :");
         for (int i = 0; i < aller.size(); i++) {
             System.out.println(" → " + aller.get(i).getId());
-
             if (i > 0) {
-                Noeud a = aller.get(i - 1);
-                Noeud b = aller.get(i);
-                Arete ar = graphe.getArete(a, b);
+                Arete ar = graphe.getArete(aller.get(i - 1), aller.get(i));
                 if (ar != null) {
                     distanceAller += ar.getDistance();
                     System.out.println("   (Rue : " + ar.getNomRue() +
-                            ", distance : " + ar.getDistance() + ")");
+                            ", distance : " + ar.getDistance() + " m)");
                 }
             }
         }
@@ -57,15 +57,12 @@ public class Main {
         System.out.println("\nItinéraire retour :");
         for (int i = 0; i < retour.size(); i++) {
             System.out.println(" → " + retour.get(i).getId());
-
             if (i > 0) {
-                Noeud a = retour.get(i - 1);
-                Noeud b = retour.get(i);
-                Arete ar = graphe.getArete(a, b);
+                Arete ar = graphe.getArete(retour.get(i - 1), retour.get(i));
                 if (ar != null) {
                     distanceRetour += ar.getDistance();
                     System.out.println("   (Rue : " + ar.getNomRue() +
-                            ", distance : " + ar.getDistance() + ")");
+                            ", distance : " + ar.getDistance() + " m)");
                 }
             }
         }
