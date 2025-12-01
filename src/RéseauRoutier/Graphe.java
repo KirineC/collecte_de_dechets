@@ -6,6 +6,8 @@ public class Graphe {
     private Map<String, Noeud> noeuds = new HashMap<>();
     private Map<Noeud, List<Arete>> adjacence = new HashMap<>();
 
+    private Map<Noeud, Integer> capacites = new HashMap<>();
+
     // Ajouter un nœud
     public void ajouterNoeud(Noeud n) {
         noeuds.put(n.getId(), n);
@@ -37,4 +39,22 @@ public class Graphe {
 
     public Map<String, Noeud> getNoeuds() { return noeuds; }
     public Map<Noeud, List<Arete>> getAdjacence() { return adjacence; }
+
+    /** Attribue une capacité à un nœud (ex: P2 = 5 unités de déchets) */
+    public void setCapacity(Noeud n, int cap) {
+        capacites.put(n, cap);
+    }
+
+    /** Get à partir du Noeud */
+    public int getCapacity(Noeud n) {
+        return capacites.getOrDefault(n, 0);
+    }
+
+    /** Get à partir du String (id) */
+    public int getCapacity(String id) {
+        Noeud n = noeuds.get(id);
+        if (n == null) return 0;
+        return capacites.getOrDefault(n, 0);
+    }
+
 }
