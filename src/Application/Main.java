@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        Graphe graphe = LecteurTexte.chargerFichier("pb2_casIdealH01.txt");
+        Graphe graphe = LecteurTexte.chargerFichier("H2P15.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         Noeud depot = graphe.getNoeud("Depot");
@@ -28,47 +28,70 @@ public class Main {
             System.out.println("\nDistance totale aller-retour : " + (distanceAller + distanceRetour) + " m");
 
         } else if (choix == 2) {
-            System.out.print("\nListe des particuliers (ex: P1,P2,P3) : ");
-            String[] ids = sc.nextLine().split(",");
-            List<Noeud> particuliers = new ArrayList<>();
-            for (String id : ids) {
-                Noeud n = graphe.getNoeud(id.trim());
-                if (n != null) particuliers.add(n);
-            }
-            if (particuliers.isEmpty()) return;
+            Map<String, List<Noeud>> tournéesParDate = new LinkedHashMap<>();
 
-            List<Noeud> tournee = new ArrayList<>();
-            Set<Noeud> nonVisites = new HashSet<>(particuliers);
-            Noeud courant = depot;
-            tournee.add(depot);
+            while (true) {
+                System.out.print("\nEntrer la date de la tournée (ou 'fin' pour terminer) : ");
+                String date = sc.nextLine().trim();
+                if (date.equalsIgnoreCase("fin")) break;
 
-            while (!nonVisites.isEmpty()) {
-                Noeud plusProche = null;
-                double distMin = Double.MAX_VALUE;
-
-                for (Noeud n : nonVisites) {
-                    List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, courant, n);
-                    double dist = 0;
-                    for (int i = 1; i < chemin.size(); i++) {
-                        Arete ar = graphe.getArete(chemin.get(i-1), chemin.get(i));
-                        dist += (ar != null ? ar.getDistance() : 0);
-                    }
-                    if (dist < distMin) { distMin = dist; plusProche = n; }
+                System.out.print("Liste des particuliers pour " + date + " (max 10, ex: P1,P2,...,P10) : ");
+                String[] ids = sc.nextLine().split(",");
+                if (ids.length > 10) {
+                    System.out.println("Vous ne pouvez sélectionner que 10 particuliers au maximum !");
+                    continue; // redemande la saisie
                 }
 
-                tournee.add(plusProche);
-                nonVisites.remove(plusProche);
-                courant = plusProche;
-            }
-            tournee.add(depot);
+                List<Noeud> particuliers = new ArrayList<>();
+                for (String id : ids) {
+                    Noeud n = graphe.getNoeud(id.trim());
+                    if (n != null) particuliers.add(n);
+                }
+                if (particuliers.isEmpty()) {
+                    System.out.println("Aucun particulier valide pour cette date !");
+                    continue;
+                }
 
-            double distanceTotale = 0;
-            System.out.println("\nTournée optimisée :");
-            for (int i = 1; i < tournee.size(); i++) {
-                distanceTotale += afficherTrajet(graphe, tournee.get(i-1), tournee.get(i), "segment " + i);
+                List<Noeud> tournee = new ArrayList<>();
+                Set<Noeud> nonVisites = new HashSet<>(particuliers);
+                Noeud courant = depot;
+                tournee.add(depot);
+
+                while (!nonVisites.isEmpty()) {
+                    Noeud plusProche = null;
+                    double distMin = Double.MAX_VALUE;
+
+                    for (Noeud n : nonVisites) {
+                        List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, courant, n);
+                        double dist = 0;
+                        for (int i = 1; i < chemin.size(); i++) {
+                            Arete ar = graphe.getArete(chemin.get(i-1), chemin.get(i));
+                            dist += (ar != null ? ar.getDistance() : 0);
+                        }
+                        if (dist < distMin) { distMin = dist; plusProche = n; }
+                    }
+
+                    tournee.add(plusProche);
+                    nonVisites.remove(plusProche);
+                    courant = plusProche;
+                }
+                tournee.add(depot);
+
+                tournéesParDate.put(date, tournee);
             }
-            System.out.println("\nDistance totale de la tournée : " + distanceTotale + " m");
+
+            System.out.println("\ntournées par date");
+            for (String date : tournéesParDate.keySet()) {
+                System.out.println("\nDate : " + date);
+                List<Noeud> tournee = tournéesParDate.get(date);
+                double distanceTotale = 0;
+                for (int i = 1; i < tournee.size(); i++) {
+                    distanceTotale += afficherTrajet(graphe, tournee.get(i-1), tournee.get(i), "segment " + i);
+                }
+                System.out.println("Distance totale de la tournée : " + distanceTotale + " m");
+            }
         }
+
         else if (choix == 3) {
             Eulerien euler = new Eulerien(graphe);
             List<Arete> circuit = euler.calculerCircuit(depot);
