@@ -21,23 +21,21 @@ public class Eulerien {
         return impairs;
     }
 
-    // ---- Dupliquer les arêtes d’un chemin ----
     private void dupliquerChemin(List<Noeud> chemin) {
         for (int i = 0; i < chemin.size() - 1; i++) {
             Noeud a = chemin.get(i);
-            Noeud b = chemin.get(i+1);
-            Arete ar = graphe.getArete(a, b);
+            Noeud b = chemin.get(i + 1);
+            Arete arExistante = graphe.getArete(a, b);
 
-            if (ar != null) {
-                // AJOUT CORRIGÉ : ajouter une copie de l'arête existante
-                graphe.ajouterArete(a, b, ar.getDistance(), ar.getNomRue(), ar.estOriente());
+            if (arExistante != null) {
+                graphe.ajouterArete(a, b, arExistante.getDistance(),
+                        arExistante.getNomRue() + "_dup",
+                        arExistante.estOriente());
             }
         }
     }
 
-    // ---- Hierholzer (inchangé) ----
     public List<Arete> calculerCircuit(Noeud depart) {
-
         Map<Noeud, LinkedList<Arete>> adjCopie = new HashMap<>();
         for (Map.Entry<Noeud, List<Arete>> entry : graphe.getAdjacence().entrySet()) {
             adjCopie.put(entry.getKey(), new LinkedList<>(entry.getValue()));
@@ -64,8 +62,19 @@ public class Eulerien {
             } else {
                 pile.pop();
                 if (!pile.isEmpty()) {
-                    Arete ar = graphe.getArete(pile.peek(), courant);
-                    if (ar != null) circuit.add(ar);
+                    Noeud precedent = pile.peek();
+
+                    // Recherche de l'arête utilisée pour relier "precedent" -> "courant"
+                    Arete arUtilisee = null;
+                    for (Arete arAdj : graphe.getAdjacence().get(precedent)) {
+                        if ((arAdj.getDepart().equals(precedent) && arAdj.getArrivee().equals(courant)) ||
+                                (!arAdj.estOriente() && arAdj.getDepart().equals(courant) && arAdj.getArrivee().equals(precedent))) {
+                            arUtilisee = arAdj;
+                            break;
+                        }
+                    }
+
+                    if (arUtilisee != null) circuit.add(arUtilisee);
                 }
             }
         }
@@ -74,25 +83,53 @@ public class Eulerien {
         return circuit;
     }
 
-    // ---- Méthode générale 0 ou 2 impairs ----
     public List<Arete> calculerCircuitGeneral(Noeud depot) {
         List<Noeud> impairs = sommetsDegreImpair();
 
-        if (impairs.size() == 0) {
-            return calculerCircuit(depot); // Circuit eulérien
+        if (impairs.isEmpty()) return calculerCircuit(depot); // Cas idéal : tous pairs
+
+        if (impairs.size() % 2 != 0) {
+            System.out.println("Nombre impair de sommets impairs : impossible de créer un circuit eulérien complet.");
+            return new ArrayList<>();
         }
 
+        // --- Cas 2 sommets impairs ---
         if (impairs.size() == 2) {
-            Noeud a = impairs.get(0);
-            Noeud b = impairs.get(1);
-
-            List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, a, b);
+            List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, impairs.get(0), impairs.get(1));
             dupliquerChemin(chemin);
-
             return calculerCircuit(depot);
         }
 
-        System.out.println("Cas non géré : plus de 2 sommets impairs.");
-        return new ArrayList<>();
+        // --- Cas général : heuristique "plus proche voisin" ---
+        Set<Noeud> nonCouples = new HashSet<>(impairs);
+
+        while (!nonCouples.isEmpty()) {
+            Noeud n1 = nonCouples.iterator().next();
+            nonCouples.remove(n1);
+
+            Noeud plusProche = null;
+            double distMin = Double.MAX_VALUE;
+
+            for (Noeud n2 : nonCouples) {
+                List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, n1, n2);
+                double dist = 0;
+                for (int i = 1; i < chemin.size(); i++) {
+                    Arete ar = graphe.getArete(chemin.get(i-1), chemin.get(i));
+                    dist += (ar != null ? ar.getDistance() : 0);
+                }
+                if (dist < distMin) {
+                    distMin = dist;
+                    plusProche = n2;
+                }
+            }
+
+            if (plusProche != null) {
+                List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, n1, plusProche);
+                dupliquerChemin(chemin);
+                nonCouples.remove(plusProche);
+            }
+        }
+
+        return calculerCircuit(depot);
     }
 }

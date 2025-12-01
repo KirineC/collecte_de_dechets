@@ -1,0 +1,13 @@
+Depot;B;100;double;0
+Depot;C;120;double;0
+B;D;80;double;0
+C;F;70;double;0
+C;D;90;double;0
+C;E;60;double;0
+E;F;110;double;0
+D;A;100;double;0
+D;G;80;double;0
+A;G;70;double;0
+A;H;300;double;0
+E;H;150;double;0
+B;H;200;double;0
