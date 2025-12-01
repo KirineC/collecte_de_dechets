@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        Graphe graphe = LecteurTexte.chargerFichier("H2P15.txt");
+        Graphe graphe = LecteurTexte.chargerFichier("H1_casGeneral.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         Noeud depot = graphe.getNoeud("Depot");
