@@ -94,11 +94,21 @@ public class Main {
 
         else if (choix == 3) {
             Eulerien euler = new Eulerien(graphe);
-            List<Arete> circuit = euler.calculerCircuit(depot);
-            double distanceTotale = 0;
+            List<Arete> circuit = euler.calculerCircuitGeneral(depot);
             System.out.println("\nCircuit eulérien :");
+            double distanceTotale = 0;
+            Noeud precedent = depot;
             for (Arete ar : circuit) {
-                System.out.println(ar.getDepart().getId() + " -> " + ar.getArrivee().getId() + " (Rue : " + ar.getNomRue() + ")");
+                if (ar.getDepart().equals(precedent)) {
+                    System.out.println(precedent.getId() + " -> " + ar.getArrivee().getId()
+                            + " (Rue : " + ar.getNomRue() + ")");
+                    precedent = ar.getArrivee();
+                } else {
+                    // on a parcouru l'arête dans l'autre sens
+                    System.out.println(precedent.getId() + " -> " + ar.getDepart().getId()
+                            + " (Rue : " + ar.getNomRue() + ")");
+                    precedent = ar.getDepart();
+                }
                 distanceTotale += ar.getDistance();
             }
             System.out.println("Distance totale : " + distanceTotale + " m");
