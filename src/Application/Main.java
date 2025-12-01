@@ -8,13 +8,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        Graphe graphe = LecteurTexte.chargerFichier("H02H03amélioré.txt");
+        Graphe graphe = LecteurTexte.chargerFichier("pb2_casIdealH01.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         Noeud depot = graphe.getNoeud("Depot");
         if (depot == null) { System.out.println("Le dépôt 'Depot' n'existe pas !"); return; }
         while (true){
-        System.out.println("\nChoix du mode de ramassage :\n1 - Un seul particulier\n2 - Plusieurs particuliers\n3 - Quitter");
+        System.out.println("\nChoix du mode de ramassage :\n1 - Un seul particulier\n2 - Plusieurs particuliers\n3 - Circuit eulerien (ramassage complet, H01\n4 - Quitter");
         System.out.print("Votre choix : ");
         int choix = Integer.parseInt(sc.nextLine());
 
@@ -70,6 +70,17 @@ public class Main {
             System.out.println("\nDistance totale de la tournée : " + distanceTotale + " m");
         }
         else if (choix == 3) {
+            Eulerien euler = new Eulerien(graphe);
+            List<Arete> circuit = euler.calculerCircuit(depot);
+            double distanceTotale = 0;
+            System.out.println("\nCircuit eulérien :");
+            for (Arete ar : circuit) {
+                System.out.println(ar.getDepart().getId() + " -> " + ar.getArrivee().getId() + " (Rue : " + ar.getNomRue() + ")");
+                distanceTotale += ar.getDistance();
+            }
+            System.out.println("Distance totale : " + distanceTotale + " m");
+        }
+        else if (choix == 4) {
             break ;
         }
         }
