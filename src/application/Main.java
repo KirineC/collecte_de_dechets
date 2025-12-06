@@ -8,13 +8,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        Graphe graphe = LecteurTexte.chargerFichier("H03.txt");
+        Graphe graphe = LecteurTexte.chargerFichier("H2testCG.txt");
         System.out.println("Graphe chargé : " + graphe.getNoeuds().size() + " noeuds");
 
         Noeud depot = graphe.getNoeud("Depot");
         if (depot == null) { System.out.println("Le dépôt 'Depot' n'existe pas !"); return; }
         while (true){
-        System.out.println("\nChoix du mode de ramassage :\n1 - Un seul particulier\n2 - Plusieurs particuliers\n3 - Circuit eulerien (ramassage complet, H01\n4 - Quitter");
+        System.out.println("\nChoix du mode de ramassage :\n1 - Collecte des encombrants chez un particulier\n2 - Tournée de ramassages des encombrants\n3 - Collecte complète des poubelles aux pieds des habitations\n4 - Quitter");
         System.out.print("Votre choix : ");
         int choix = Integer.parseInt(sc.nextLine());
 

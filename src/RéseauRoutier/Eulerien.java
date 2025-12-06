@@ -9,18 +9,31 @@ public class Eulerien {
         this.graphe = g;
     }
 
-    // ---- Trouver les sommets impairs ----
+    // ---- Trouver les sommets "impairs" pour un graphe mixte ----
     public List<Noeud> sommetsDegreImpair() {
         List<Noeud> impairs = new ArrayList<>();
+
         for (Noeud n : graphe.getNoeuds().values()) {
-            int degre = graphe.getAdjacence().get(n).size();
-            if (degre % 2 != 0) {
+            int degreSortant = graphe.getAdjacence().get(n).size();
+            int degreEntrant = 0;
+
+            // Compter les arêtes entrantes orientées
+            for (Noeud m : graphe.getNoeuds().values()) {
+                for (Arete a : graphe.getAdjacence().get(m)) {
+                    if (a.getArrivee().equals(n) && a.estOriente()) degreEntrant++;
+                }
+            }
+
+            // Vérifier si degré sortant ≠ degré entrant pour les sommets orientés
+            if ((degreSortant % 2 != 0) || (Math.abs(degreSortant - degreEntrant) == 1)) {
                 impairs.add(n);
             }
         }
+
         return impairs;
     }
 
+    // ---- Dupliquer un chemin pour équilibrer les sommets impairs ----
     private void dupliquerChemin(List<Noeud> chemin) {
         for (int i = 0; i < chemin.size() - 1; i++) {
             Noeud a = chemin.get(i);
@@ -28,6 +41,7 @@ public class Eulerien {
             Arete arExistante = graphe.getArete(a, b);
 
             if (arExistante != null) {
+                // Dupliquer uniquement dans le sens existant
                 graphe.ajouterArete(a, b, arExistante.getDistance(),
                         arExistante.getNomRue() + "_dup",
                         arExistante.estOriente());
@@ -35,6 +49,7 @@ public class Eulerien {
         }
     }
 
+    // ---- Algorithme d’Hierholzer adapté ----
     public List<Arete> calculerCircuit(Noeud depart) {
         Map<Noeud, LinkedList<Arete>> adjCopie = new HashMap<>();
         for (Map.Entry<Noeud, List<Arete>> entry : graphe.getAdjacence().entrySet()) {
@@ -64,7 +79,7 @@ public class Eulerien {
                 if (!pile.isEmpty()) {
                     Noeud precedent = pile.peek();
 
-                    // Recherche de l'arête utilisée pour relier "precedent" -> "courant"
+                    // Retrouver l'arête utilisée pour relier "precedent" -> "courant"
                     Arete arUtilisee = null;
                     for (Arete arAdj : graphe.getAdjacence().get(precedent)) {
                         if ((arAdj.getDepart().equals(precedent) && arAdj.getArrivee().equals(courant)) ||
@@ -83,6 +98,7 @@ public class Eulerien {
         return circuit;
     }
 
+    // ---- Calcul du circuit général ----
     public List<Arete> calculerCircuitGeneral(Noeud depot) {
         List<Noeud> impairs = sommetsDegreImpair();
 
@@ -100,7 +116,7 @@ public class Eulerien {
             return calculerCircuit(depot);
         }
 
-        // --- Cas général : heuristique "plus proche voisin" ---
+        // --- Cas général : heuristique "plus proche voisin" pour tous les sommets impairs ---
         Set<Noeud> nonCouples = new HashSet<>(impairs);
 
         while (!nonCouples.isEmpty()) {
