@@ -1,6 +1,7 @@
 package application;
 
-import RéseauRoutier.*;
+import RéseauRoutier.Graphe;
+import RéseauRoutier.Noeud;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,59 +10,98 @@ import java.io.IOException;
 public class LecteurTexteT2 {
 
     /**
-     * Lit un fichier texte de type "Vendome.txt" :
-     * - Lignes de capacité :   P2;CAP;4
-     * - Lignes d'arêtes :      A;B;12.5
+     * Charger un fichier de graphe pour le Thème 2.
+     * Format attendu :
+     *   - Routes :  A;B;distance
+     *   - Capacités : Pi;CAP;valeur
+     *
+     * ho = 1 -> HO1 : non orienté (double sens)
+     * ho = 2 -> HO2 : orienté
+     * ho = 3 -> HO3 : mixte (orienté, double sens codé par deux lignes A;B et B;A)
      */
-    public static Graphe chargerFichier(String path) throws IOException {
+    public static Graphe chargerFichier(String nomFichier, int ho) {
         Graphe g = new Graphe();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            String line;
+        // HO1 = non orienté (double sens)
+        // HO2 / HO3 = on respecte le sens écrit dans le fichier
+        boolean estOrienteGlobal = (ho != 1);
 
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
+        try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
+            String ligne;
+            while ((ligne = br.readLine()) != null) {
+                ligne = ligne.trim();
+                if (ligne.isEmpty()) continue;        // ignore les lignes vides
+                if (ligne.startsWith("#")) continue;  // ignore les commentaires
 
-                // ignorer les lignes vides ou commentaires
-                if (line.isEmpty() || line.startsWith("#")) continue;
-
-                String[] parts = line.split(";");
-                if (parts.length < 3) continue;
-
-                String from = parts[0].trim();
-                String to   = parts[1].trim();
-                String wStr = parts[2].trim();
-
-                // S'assurer que le nœud 'from' existe
-                Noeud fromNode = g.getNoeud(from);
-                if (fromNode == null) {
-                    fromNode = new Noeud(from);
-                    g.ajouterNoeud(fromNode);
+                String[] parts = ligne.split(";");
+                if (parts.length != 3) {
+                    // Ligne mal formée, on ignore
+                    continue;
                 }
 
-                // 🔹 Cas 1 : ligne de capacité →  P1;CAP;4
-                if (to.equalsIgnoreCase("CAP")) {
-                    int cap = Integer.parseInt(wStr);
-                    g.setCapacity(fromNode, cap);
-                }
-                // 🔹 Cas 2 : ligne d'arête →  A;B;12.5
-                else {
-                    double distance = Double.parseDouble(wStr);
+                String id1 = parts[0].trim();
+                String id2 = parts[1].trim();
+                String val = parts[2].trim();
 
-                    // S'assurer que le nœud 'to' existe
-                    Noeud toNode = g.getNoeud(to);
-                    if (toNode == null) {
-                        toNode = new Noeud(to);
-                        g.ajouterNoeud(toNode);
+                // ====== CASE CAPACITÉS : P1;CAP;6 ======
+                if (id2.equalsIgnoreCase("CAP")) {
+                    int cap;
+                    try {
+                        cap = Integer.parseInt(val);
+                    } catch (NumberFormatException e) {
+                        // valeur non valide -> on ignore
+                        continue;
                     }
 
-                    // Graphe NON ORIENTÉ → deux sens
-                    String nomRue = from + "-" + to; // ou autre format
-                    g.ajouterArete(fromNode, toNode, distance, nomRue, false);
+                    Noeud p = g.getNoeud(id1);
+                    if (p == null) {
+                        p = new Noeud(id1);
+                        g.ajouterNoeud(p);
+                    }
+                    g.setCapacity(p, cap);
+                }
+
+                // ====== CASE ROUTES : A;B;distance ======
+                else {
+                    double distance;
+                    try {
+                        distance = Double.parseDouble(val);
+                    } catch (NumberFormatException e) {
+                        continue; // distance invalide -> on ignore
+                    }
+
+                    Noeud depart = g.getNoeud(id1);
+                    if (depart == null) {
+                        depart = new Noeud(id1);
+                        g.ajouterNoeud(depart);
+                    }
+
+                    Noeud arrivee = g.getNoeud(id2);
+                    if (arrivee == null) {
+                        arrivee = new Noeud(id2);
+                        g.ajouterNoeud(arrivee);
+                    }
+
+                    String nomRue = id1 + "-" + id2;
+
+                    // HO1 : estOrienteGlobal = false -> ajoute aussi l'arête inverse
+                    // HO2 / HO3 : estOrienteGlobal = true -> on respecte le sens du fichier
+                    g.ajouterArete(depart, arrivee, distance, nomRue, estOrienteGlobal);
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return g;
+    }
+
+    /**
+     * Surcharge pratique :
+     * si tu appelles LecteurTexteT2.chargerFichier("fichier"),
+     * on considère HO1 (non orienté) par défaut.
+     */
+    public static Graphe chargerFichier(String nomFichier) {
+        return chargerFichier(nomFichier, 1);
     }
 }
