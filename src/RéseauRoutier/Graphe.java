@@ -23,6 +23,24 @@ public class Graphe {
         }
     }
 
+
+    // POUR H03
+    //public void ajouterArete(Noeud a, Noeud b, double distance, String nomRue, int sens) {
+        // sens = 1 → rue à sens unique ou double multivoies, 0 → double à une voie
+      //  if (sens == 1) {
+            // Rue simple ou double multivoies → ajout d'une arête unique (A->B)
+        //    adjacence.get(a).add(new Arete(a, b, distance, nomRue, true));
+          //  if (!"simple".equals(nomRue)) {
+                // Si double multivoies, ajouter également l'arête inverse (B->A) pour représenter le second passage
+         //   //    adjacence.get(b).add(new Arete(b, a, distance, nomRue, true));
+           // }
+      //  } else {
+            // Rue double sens à une voie → arêtes A->B et B->A
+        //    adjacence.get(a).add(new Arete(a, b, distance, nomRue, false));
+      //      adjacence.get(b).add(new Arete(b, a, distance, nomRue, false));
+    //    }
+  //  }
+
     public Noeud getNoeud(String id) {
         return noeuds.get(id);
     }

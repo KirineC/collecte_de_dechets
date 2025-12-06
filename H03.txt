@@ -16,3 +16,6 @@ P3;RueGeneralNoel;60;simple;1
 RueLaurin;P3;90;simple;1
 P4;HopitalStell_Nord;90;simple;1
 RueGeneralNoel;P4;350;simple;1
+RueHaute_Ouest;Rue4Sept_Sud;150;double;1
+RueLaurin;RueHaute_Est;300;double;1
+

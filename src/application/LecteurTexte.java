@@ -34,7 +34,8 @@ public class LecteurTexte {
                     estOriente = false;  // double sens
 
                 String nomRue = "Rue" + compteurRue++;
-                graphe.ajouterArete(depart, arrivee, distance, nomRue, estOriente);
+                graphe.ajouterArete(depart, arrivee, distance, nomRue, estOriente);//
+                // POUR H03 graphe.ajouterArete(depart, arrivee, distance, nomRue, sens);
             }
         } catch (IOException e) { e.printStackTrace(); }
 
