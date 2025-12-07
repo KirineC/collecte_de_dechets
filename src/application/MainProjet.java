@@ -11,7 +11,8 @@ public class MainProjet {
             System.out.println("\n================= MENU PRINCIPAL =================");
             System.out.println("1 - Thème 1 : programme de mes coéquipiers");
             System.out.println("2 - Thème 2 : mon programme (TSP / MST / capacité)");
-            System.out.println("3 - Quitter");
+            System.out.println("3 - Thème 3 : Coloration des secteurs (Welsh & Powell)");
+            System.out.println("4 - Quitter");
             System.out.print("Votre choix : ");
 
             String line = sc.nextLine().trim();
@@ -34,7 +35,13 @@ public class MainProjet {
                     MainTheme2.main(new String[0]);
                     break;
 
+
                 case 3:
+                    MainTheme3.main(null);
+                    break;
+
+
+                case 4:
                     System.out.println("Au revoir !");
                     sc.close();
                     return;
