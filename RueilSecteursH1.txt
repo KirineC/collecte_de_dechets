@@ -1,0 +1,40 @@
+12
+S1 Belle rive
+S2 Bords de seine
+S3 Centre ville
+S4 Richelieu chataigneraie
+S5 Coteaux
+S6 Jonchère malmaison st cucufa
+S7 Plateau
+S8 Mont Valerien
+S9 Mazurières
+S10 Buzenval
+S11 Plaine Gare
+S12 Rueil sur seine
+0 1 1 0 0 0 0 0 0 0 1 1
+1 0 1 0 0 1 0 0 0 0 0 0
+1 1 0 1 1 1 1 0 0 0 1 0
+0 0 1 0 0 1 1 0 1 1 0 0
+0 0 1 0 0 0 1 1 0 0 1 0
+0 1 1 1 0 0 0 0 0 0 0 0
+0 0 1 1 1 0 0 1 1 0 0 0
+0 0 0 0 1 0 1 0 0 0 0 0
+0 0 0 1 0 0 1 0 0 1 0 0
+0 0 0 1 0 0 0 0 1 0 0 0
+1 0 1 0 1 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 1 0
+
+# Quantités de déchets par secteur
+S1 40
+S2 32
+S3 55
+S4 45
+S5 38
+S6 50
+S7 48
+S8 30
+S9 36
+S10 42
+S11 44
+S12 35
+

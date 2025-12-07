@@ -6,18 +6,20 @@ import RéseauRoutier.Noeud;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LecteurSecteursH1 {
 
-    // Map id -> nom complet du quartier (S1 -> "Belle rive")
+
     private static Map<String, String> labels = new HashMap<>();
+
+
+    private static Map<String, Double> quantitesParId = new HashMap<>();
 
     public static Graphe chargerSecteurs(String nomFichier) {
         Graphe g = new Graphe();
-        labels.clear();  // au cas où on recharge un autre fichier
+        labels.clear();
+        quantitesParId.clear();
         int compteurRue = 1;
 
         try (BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
@@ -40,16 +42,15 @@ public class LecteurSecteursH1 {
                     continue;
                 }
 
-                // On prend le premier mot comme ID, le reste comme label
                 String[] parts = ligne.split("\\s+", 2);
                 String id = parts[0].trim();
                 String label = (parts.length > 1 ? parts[1].trim() : id);
 
-                labels.put(id, label); // mémorise le nom complet
+                labels.put(id, label);
 
                 Noeud s = g.getNoeud(id);
                 if (s == null) {
-                    s = new Noeud(id); // Noeud ne connaît que l'id
+                    s = new Noeud(id);
                     g.ajouterNoeud(s);
                 }
                 noeuds.add(s);
@@ -73,7 +74,6 @@ public class LecteurSecteursH1 {
 
                 for (int j = 0; j < n; j++) {
                     if ("1".equals(vals[j])) {
-                        // Matrice symétrique : on ne crée l'arête que pour j > i
                         if (j > i) {
                             Noeud a = noeuds.get(i);
                             Noeud b = noeuds.get(j);
@@ -84,6 +84,21 @@ public class LecteurSecteursH1 {
                 }
             }
 
+
+            while ((ligne = br.readLine()) != null) {
+                ligne = ligne.trim();
+                if (ligne.isEmpty() || ligne.startsWith("#")) {
+                    continue;
+                }
+
+                String[] parts = ligne.split("\\s+");
+                if (parts.length >= 2) {
+                    String id = parts[0].trim();
+                    double q = Double.parseDouble(parts[1]);
+                    quantitesParId.put(id, q);
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,9 +106,19 @@ public class LecteurSecteursH1 {
         return g;
     }
 
-    // Récupérer le nom complet à partir de l'id
+
     public static String getLabel(String id) {
         String label = labels.get(id);
         return (label != null ? label : id);
+    }
+
+
+    public static Double getQuantite(String id) {
+        return quantitesParId.get(id);
+    }
+
+
+    public static Map<String, Double> getQuantitesParId() {
+        return Collections.unmodifiableMap(quantitesParId);
     }
 }
