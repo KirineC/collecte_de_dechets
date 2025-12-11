@@ -9,9 +9,9 @@ public class MainProjet {
 
         while (true) {
             System.out.println("\n================= MENU PRINCIPAL =================");
-            System.out.println("1 - Thème 1 : programme de mes coéquipiers");
-            System.out.println("2 - Thème 2 : mon programme (TSP / MST / capacité)");
-            System.out.println("3 - Thème 3 : Coloration des secteurs (Welsh & Powell)");
+            System.out.println("1 - Thème 1 ");
+            System.out.println("2 - Thème 2 ");
+            System.out.println("3 - Thème 3 ");
             System.out.println("4 - Quitter");
             System.out.print("Votre choix : ");
 
@@ -26,12 +26,12 @@ public class MainProjet {
 
             switch (choix) {
                 case 1:
-                    // 🔹 On appelle directement le main de tes coéquipiers
+
                     Main.main(new String[0]);
                     break;
 
                 case 2:
-                    // 🔹 On appelle ton main du thème 2
+
                     MainTheme2.main(new String[0]);
                     break;
 

@@ -125,9 +125,7 @@ public class MainTheme2 {
         }
     }
 
-    // ==============================
-    // Demander HO1 / HO2 / HO3
-    // ==============================
+
     private static int demanderHypothese(Scanner sc) {
         while (true) {
             System.out.println("\nChoisissez l'hypothèse d'orientation :");
@@ -148,9 +146,7 @@ public class MainTheme2 {
         }
     }
 
-    // ==============================
-    // APPROCHE 1 : PLUS PROCHE VOISIN
-    // ==============================
+
     private static void approcheNN(Graphe g,
                                    List<String> tspNodes,
                                    double[][] dist,
@@ -279,10 +275,7 @@ public class MainTheme2 {
         }
     }
 
-    // ==============================
-    // Construction du chemin complet
-    // avec interdiction du demi-tour sur Pi
-    // ==============================
+
     private static List<String> construireCheminComplet(Graphe g,
                                                         List<String> tour,
                                                         Map<String, Map<String, List<String>>> chemins) {
@@ -332,10 +325,7 @@ public class MainTheme2 {
         return id != null && id.matches("P\\d+");
     }
 
-    /**
-     * Plus court chemin source -> cible en interdisant l'arc interditFrom -> interditTo
-     * (petit Dijkstra ad hoc sur le graphe g)
-     */
+
     private static List<String> plusCourtCheminSansArc(Graphe g,
                                                        String sourceId,
                                                        String targetId,

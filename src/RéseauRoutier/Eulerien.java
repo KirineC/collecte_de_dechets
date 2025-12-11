@@ -9,7 +9,7 @@ public class Eulerien {
         this.graphe = g;
     }
 
-    // ---- Trouver les sommets "impairs" pour un graphe mixte ----
+    // trouver les sommets impairs pour un graphe mixte
     public List<Noeud> sommetsDegreImpair() {
         List<Noeud> impairs = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class Eulerien {
                 }
             }
 
-            // Vérifier si degré sortant ≠ degré entrant pour les sommets orientés
+            // Vérifier si degré sortant =/ degré entrant pour les sommets orientés
             if ((degreSortant % 2 != 0) || (Math.abs(degreSortant - degreEntrant) == 1)) {
                 impairs.add(n);
             }
@@ -33,7 +33,7 @@ public class Eulerien {
         return impairs;
     }
 
-    // ---- Dupliquer un chemin pour équilibrer les sommets impairs ----
+    // Dupliquer un chemin pour équilibrer les sommets impairs
     private void dupliquerChemin(List<Noeud> chemin) {
         for (int i = 0; i < chemin.size() - 1; i++) {
             Noeud a = chemin.get(i);
@@ -49,7 +49,7 @@ public class Eulerien {
         }
     }
 
-    // ---- Algorithme d’Hierholzer adapté ----
+    // Algorithme d’Hierholzer adapté
     public List<Arete> calculerCircuit(Noeud depart) {
         Map<Noeud, LinkedList<Arete>> adjCopie = new HashMap<>();
         for (Map.Entry<Noeud, List<Arete>> entry : graphe.getAdjacence().entrySet()) {
@@ -98,7 +98,7 @@ public class Eulerien {
         return circuit;
     }
 
-    // ---- Calcul du circuit général ----
+    //Calcul du circuit général
     public List<Arete> calculerCircuitGeneral(Noeud depot) {
         List<Noeud> impairs = sommetsDegreImpair();
 
@@ -109,14 +109,14 @@ public class Eulerien {
             return new ArrayList<>();
         }
 
-        // --- Cas 2 sommets impairs ---
+        //Cas 2 sommets impairs
         if (impairs.size() == 2) {
             List<Noeud> chemin = Dijkstra.plusCourtChemin(graphe, impairs.get(0), impairs.get(1));
             dupliquerChemin(chemin);
             return calculerCircuit(depot);
         }
 
-        // --- Cas général : heuristique "plus proche voisin" pour tous les sommets impairs ---
+        //Cas général : heuristique "plus proche voisin" pour tous les sommets impairs
         Set<Noeud> nonCouples = new HashSet<>(impairs);
 
         while (!nonCouples.isEmpty()) {

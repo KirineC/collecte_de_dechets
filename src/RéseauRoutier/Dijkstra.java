@@ -5,10 +5,10 @@
     public class Dijkstra {
 
         public static List<Noeud> plusCourtChemin(Graphe graphe, Noeud depart, Noeud arrivee) {
-            Map<Noeud, Double> distance = new HashMap<>();
-            Map<Noeud, Noeud> precedent = new HashMap<>();
+            Map<Noeud, Double> distance = new HashMap<>();//map distance pour chaque noeud
+            Map<Noeud, Noeud> precedent = new HashMap<>();//map noeud precedents pour reconstruire le chemin
             Set<Noeud> visited = new HashSet<>();
-            PriorityQueue<Noeud> queue = new PriorityQueue<>(Comparator.comparing(distance::get));
+            PriorityQueue<Noeud> queue = new PriorityQueue<>(Comparator.comparing(distance::get));//traiter noeud les plus proches
 
             for (Noeud n : graphe.getNoeuds().values()) {
                 distance.put(n, Double.MAX_VALUE);
@@ -19,14 +19,14 @@
             queue.add(depart);
 
             while (!queue.isEmpty()) {
-                Noeud courant = queue.poll();
+                Noeud courant = queue.poll();//retire noeud avec plus petite distance
                 if (!visited.add(courant)) continue;
                 if (courant.equals(arrivee)) break;
 
                 for (Arete ar : graphe.getAdjacence().getOrDefault(courant, new ArrayList<>())) {
                     Noeud voisin = ar.getArrivee();
-                    double nouvDist = distance.get(courant) + ar.getDistance();
-                    if (nouvDist < distance.get(voisin)) {
+                    double nouvDist = distance.get(courant) + ar.getDistance();//calcule distance
+                    if (nouvDist < distance.get(voisin)) {//si dist plus petite -> ajoute voisin a la queue
                         distance.put(voisin, nouvDist);
                         precedent.put(voisin, courant);
                         queue.add(voisin);
@@ -38,11 +38,16 @@
             Noeud actuel = arrivee;
             while (actuel != null) {
                 chemin.add(actuel);
-                actuel = precedent.get(actuel);
+                actuel = precedent.get(actuel);//reconstruit chemin
             }
             Collections.reverse(chemin);
             return chemin;
         }
+
+
+
+
+
         public static class Result {
             public final Map<Noeud, Double> dist;  // distance minimale depuis la source
             public final Map<Noeud, Noeud> prev;   // prédécesseur sur le plus court chemin
@@ -52,10 +57,7 @@
                 this.prev = prev;
             }
 
-            /**
-             * Reconstruit le chemin source -> target sous forme de liste de Noeud.
-             * Si aucun chemin n'existe, renvoie une liste vide.
-             */
+
             public List<Noeud> buildPath(Noeud source, Noeud target) {
                 List<Noeud> path = new ArrayList<>();
                 Noeud curr = target;
@@ -75,12 +77,7 @@
             }
         }
 
-        /**
-         * Calcule les plus courts chemins depuis un noeud source vers tous les autres noeuds
-         * du graphe. Renvoie un objet Result contenant :
-         *   - dist : distance minimale source -> noeud
-         *   - prev : prédécesseur sur un plus court chemin
-         */
+
         public static Result shortestPaths(Graphe g, Noeud source) {
             Map<Noeud, Double> dist = new HashMap<>();
             Map<Noeud, Noeud> prev = new HashMap<>();
